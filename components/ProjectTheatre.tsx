@@ -1,12 +1,12 @@
 'use client';
-import {ArrowIcon,CloseIcon} from './UiIcons';
+import {ArrowIcon} from './UiIcons';
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { projects, type Project } from '@/lib/content';
 import SelectMenu from './SelectMenu';
 
-const INTRO=3.8, STEP=3.8, ENTER=1.2, EXIT=1, GAP=.15, TAIL=1.6;
+const INTRO=3.8, REVEAL=.8, STEP=.9, TAIL=.35;
 export default function ProjectTheatre({ motion, onSelect }: { motion: boolean; onSelect: (project: Project) => void }) {
  const root=useRef<HTMLDivElement>(null);
  const trigger=useRef<ScrollTrigger|null>(null);
@@ -20,27 +20,35 @@ export default function ProjectTheatre({ motion, onSelect }: { motion: boolean; 
     const el=root.current!; el.classList.add('collection-live');
     const cards=Array.from(el.querySelectorAll<HTMLElement>('.collection-card'));
     const controls=el.querySelector<HTMLElement>('.collection-controls')!;
-    gsap.set(cards,{autoAlpha:0,xPercent:0,y:65,z:0,rotationY:0,scale:1,clipPath:'inset(100% 0% 0% 0% round 24px)'});
+    const playhead={index:0};
+    const visibleCards=new Set<HTMLElement>();
+    let lastIndex=-1;
+    const placeCards=()=>{
+     const index=Math.round(playhead.index);if(index!==lastIndex){setActive(index);lastIndex=index;}
+     cards.forEach((card,i)=>{
+      const offset=i-playhead.index,distance=Math.abs(offset),near=distance<1.85;
+      card.inert=i!==index;card.setAttribute('aria-hidden',String(i!==index));
+      if(near){const d=Math.min(distance,1),soft=d*d*(3-2*d),angle=offset*.78,depth=1-Math.cos(angle),edge=Math.max(0,Math.min(1,(1.85-distance)/.5));visibleCards.add(card);gsap.set(card,{xPercent:Math.sin(angle)*125,yPercent:depth*9,z:-depth*420,scale:1-soft*.16,rotationY:-Math.sin(angle)*18,autoAlpha:(1-soft*.58)*edge,filter:'blur('+soft*5+'px)',borderColor:'rgba(184,210,145,'+(.16+(1-soft)*.3)+')',zIndex:10-Math.round(distance*4)})}
+      else if(visibleCards.has(card)){gsap.set(card,{autoAlpha:0});visibleCards.delete(card)}
+     });
+    };
+    gsap.set(cards,{autoAlpha:0});placeCards();
+    gsap.set('.collection-window',{autoAlpha:0,y:45});
     gsap.set('.collection-ready',{autoAlpha:0,scale:.8});
     gsap.set(controls,{autoAlpha:0});controls.inert=true;
     cards.forEach(card=>{card.inert=true;card.setAttribute('aria-hidden','true')});
-    const story=gsap.timeline({scrollTrigger:{trigger:el,start:'top top+=80',end:()=>'+='+((projects.length+3)*Math.max(1400,innerHeight*2.2)),pin:el.querySelector('.collection-stage'),scrub:1.1,invalidateOnRefresh:true},onUpdate:()=>{
-     const time=story.time(),index=Math.min(projects.length-1,Math.max(0,Math.floor((time-INTRO)/STEP)));
-     setActive(index);controls.inert=time<3.8;
-     cards.forEach((card,i)=>{const hidden=time<3.8||i!==index;card.inert=hidden;card.setAttribute('aria-hidden',String(hidden))});
+    const story=gsap.timeline({scrollTrigger:{trigger:el,start:'top top+=80',end:()=>'+='+(innerHeight*1.6+(projects.length-1)*Math.max(320,innerHeight*.52)),pin:el.querySelector('.collection-stage'),scrub:.55,invalidateOnRefresh:true},onUpdate:()=>{
+     placeCards();const hidden=story.time()<INTRO;controls.inert=hidden;
+     if(hidden)cards.forEach(card=>{card.inert=true;card.setAttribute('aria-hidden','true')});
     }});
-    story.fromTo('.collection-heading',{autoAlpha:0,scale:.78,y:65},{autoAlpha:1,scale:1,y:0,duration:1,ease:'power3.out'})
-     .to('.collection-heading',{xPercent:130,rotationY:-12,autoAlpha:0,duration:1.1,ease:'power2.inOut'},1.4)
-     .to('.collection-ready',{autoAlpha:1,scale:1,duration:.7,ease:'power2.out'},2.3)
-     .to('.collection-ready',{autoAlpha:0,scale:1.2,y:-45,duration:.5},3.3)
-     .to(controls,{autoAlpha:1,duration:.4},3.8);
-    cards.forEach((card,i)=>{
-     const at=INTRO+i*STEP;
-     // Finish the outgoing card before the next entrance: no crossfade overlap.
-     if(i)story.to(cards[i-1],{xPercent:0,y:-45,z:0,rotationY:0,scale:.98,clipPath:'inset(0% 0% 100% 0% round 24px)',autoAlpha:0,duration:EXIT,ease:'power2.inOut'},at-EXIT-GAP);
-     story.to(card,{autoAlpha:1,xPercent:0,y:0,z:0,rotationY:0,scale:1,clipPath:'inset(0% 0% 0% 0% round 24px)',duration:ENTER,ease:'power2.inOut'},at)
-      .fromTo(card.querySelector('.collection-copy'),{y:25},{y:0,duration:.9,ease:'power2.out'},at+.2);
-    });
+    story.fromTo('.collection-heading',{autoAlpha:0,xPercent:25,scale:.96},{autoAlpha:1,xPercent:0,scale:1,duration:1,ease:'power2.out'})
+     .to('.collection-heading',{xPercent:-120,autoAlpha:0,duration:1.1,ease:'sine.inOut'},1.2)
+     .to('.collection-ready',{autoAlpha:1,scale:1,duration:.65,ease:'power2.out'},2.2)
+     .to('.collection-ready',{autoAlpha:0,scale:1.1,y:-25,duration:.5},3.2)
+     .to('.collection-window',{autoAlpha:1,y:0,duration:.8,ease:'power2.out'},INTRO)
+     .to(controls,{autoAlpha:1,duration:.4},INTRO+.3);
+    // Continuous progress: scrolling never waits through a per-project hold.
+    story.to(playhead,{index:cards.length-1,duration:(cards.length-1)*STEP,ease:'none'},INTRO+REVEAL);
     story.to({}, {duration:TAIL});
     trigger.current=story.scrollTrigger!;
     return()=>{trigger.current=null;el.classList.remove('collection-live');controls.inert=false;cards.forEach(card=>{card.inert=false;card.removeAttribute('aria-hidden')})};
@@ -50,7 +58,7 @@ export default function ProjectTheatre({ motion, onSelect }: { motion: boolean; 
  },[motion]);
  const jump=(index:number)=>{
   const st=trigger.current;
-  if(st)window.dispatchEvent(new CustomEvent('portfolio:chapter',{detail:st.start+(st.end-st.start)*(INTRO+index*STEP+ENTER)/(INTRO+(projects.length-1)*STEP+ENTER+TAIL)}));
+  if(st)window.dispatchEvent(new CustomEvent('portfolio:chapter',{detail:st.start+(st.end-st.start)*(INTRO+REVEAL+index*STEP)/(INTRO+REVEAL+(projects.length-1)*STEP+TAIL)}));
   else root.current?.querySelectorAll('.collection-card')[index]?.scrollIntoView({block:'start',behavior:motion?'smooth':'instant'});
   setActive(index);
  };

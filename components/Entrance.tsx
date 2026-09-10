@@ -42,6 +42,18 @@ export default function Entrance({onUnavailable}:{onUnavailable:()=>void}){
   const texture=new THREE.TextureLoader().load('/assets/usman-cutout.webp',()=>{if(!alive)return;loaded=true;dirty=true;});texture.colorSpace=THREE.SRGBColorSpace;resources.push(texture);
   const portraitMat=new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.03,depthWrite:false,toneMapped:false,side:THREE.DoubleSide});resources.push(portraitMat);
   const portraitGeo=new THREE.PlaneGeometry(3.5*(900/920),3.5);resources.push(portraitGeo);const character=new THREE.Mesh(portraitGeo,portraitMat);characterGroup.add(character);
+  // Alpha-derived rim follows the actual silhouette, without changing the portrait pixels.
+  const portraitRimMaterial=new THREE.ShaderMaterial({
+   uniforms:{portrait:{value:texture},texel:{value:new THREE.Vector2(1/900,1/920)},rimColor:{value:new THREE.Color(0xc8ff79)}},
+   vertexShader:'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+   fragmentShader:`uniform sampler2D portrait; uniform vec2 texel; uniform vec3 rimColor; varying vec2 vUv;
+    void main(){float center=texture2D(portrait,vUv).a;float edge=0.0;float halo=0.0;
+     for(int i=0;i<8;i++){float angle=float(i)*.785398;vec2 direction=vec2(cos(angle),sin(angle));edge=max(edge,texture2D(portrait,vUv+direction*texel*2.5).a);halo=max(halo,texture2D(portrait,vUv+direction*texel*5.5).a);}
+     float alpha=(1.0-center)*(.72*edge+.16*halo);if(alpha<.015)discard;gl_FragColor=vec4(rimColor,alpha);
+     #include <colorspace_fragment>
+    }`,transparent:true,depthWrite:false,toneMapped:false,side:THREE.DoubleSide
+  });resources.push(portraitRimMaterial);
+  const portraitRim=new THREE.Mesh(portraitGeo,portraitRimMaterial);portraitRim.position.z=-.008;character.add(portraitRim);
   // The supplied illustrated character remains a textured portrait, not a fabricated rigged model.
   const state={progress:0};const entry=mount.closest('.entrance');
   gsap.registerPlugin(ScrollTrigger);
@@ -53,11 +65,21 @@ export default function Entrance({onUnavailable}:{onUnavailable:()=>void}){
   const io=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible)dirty=true});io.observe(mount);
   const changeVisibility=()=>{dirty=true};document.addEventListener('visibilitychange',changeVisibility);window.addEventListener('pointermove',pointer,{passive:true});
   const contextLost=(event:Event)=>{event.preventDefault();mount.style.opacity='0';onUnavailable()};renderer.domElement.addEventListener('webglcontextlost',contextLost);
-  let previous=-1,announced=false;
-  const render=()=>{if(!visible||document.hidden||!dirty)return;dirty=false;const p=state.progress;
+  let previous=-1,announced=false,lastFrame=0;
+  const render=(time:number)=>{
+   if(!visible||document.hidden)return;
+   const p=state.progress,characterInView=loaded&&p>.16&&p<.98;
+   if(!dirty&&!characterInView)return;
+   if(characterInView&&!dirty&&time-lastFrame<1/(constrained?24:40))return;
+   lastFrame=time;dirty=false;
+   // Animate the intact cutout gently; do not warp the face or invent a facial rig.
+   const breathe=Math.sin(time*1.5),sway=Math.sin(time*.75);
+   character.position.y=characterInView?breathe*.018:0;
+   character.rotation.z=characterInView?sway*.006:0;
+   character.scale.setScalar(characterInView?1+breathe*.0025:1);
    const opening=THREE.MathUtils.smoothstep(p,.05,.52);left.rotation.y=-opening*1.55;right.rotation.y=opening*1.55;
    const forward=THREE.MathUtils.smoothstep(p,.3,1);camera.position.set(mouse.x+forward*.35,1.9+mouse.y+forward*.1,(small?10.5:9)-forward*9.5);camera.lookAt(forward*.5,2.3,-5);
-   characterGroup.position.z=-4.6+THREE.MathUtils.smoothstep(p,.2,.68)*1.1;characterGroup.rotation.y=-forward*.1;
+   characterGroup.position.z=-4.6+THREE.MathUtils.smoothstep(p,.2,.68)*1.1;characterGroup.rotation.y=-forward*.1+(characterInView?sway*.018:0);
    key.intensity=55+opening*80;rim.intensity=24+opening*55;fill.intensity=5+forward*18;rim.color.setHSL(.23-forward*.1,.9,.64);renderer.toneMappingExposure=1.05+opening*.27;
    plinth.visible=p<.96;character.visible=loaded;renderer.render(scene,camera);if(loaded&&!announced){announced=true;window.dispatchEvent(new Event('portfolio:scene-ready'))}if(previous<0){mount.style.opacity='1';previous=p}
   };
