@@ -1,0 +1,30 @@
+{
+  "name": "usman-farooqi-portfolio",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Usman Farooqi's cinematic portfolio",
+  "scripts": {
+    "dev": "next dev --webpack --hostname 127.0.0.1 --port 3001",
+    "start": "node scripts/serve.mjs out 3001",
+    "build": "next build --webpack",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20.9"
+  },
+  "dependencies": {
+    "gsap": "^3.14.2",
+    "lenis": "^1.3.26",
+    "next": "16.3.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "three": "^0.183.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/three": "^0.183.0",
+    "typescript": "^5"
+  }
+}

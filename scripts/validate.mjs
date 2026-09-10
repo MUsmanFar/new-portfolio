@@ -1,0 +1,14 @@
+import { readFile, access } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { Script } from 'node:vm';
+const html = await readFile('dist/index.html', 'utf8');
+const js = await readFile('dist/app.js', 'utf8');
+new Script(js);
+const references = [...html.matchAll(/(?:src|href)="([^"#]+)"/g)].map(m => m[1]).filter(s => !/^(https?:|mailto:|data:)/.test(s));
+for (const ref of references) await access(resolve('dist', ref));
+const images = [...js.matchAll(/image:'([^']+)'/g)].map(m => m[1]);
+for (const image of images) await access(resolve('dist/assets', image + '.webp'));
+if (images.length !== 11) throw new Error('Expected all 11 portfolio projects');
+const ids = new Set([...html.matchAll(/id="([^"]+)"/g)].map(m => m[1]));
+for (const [, id] of html.matchAll(/href="#([^"]+)"/g)) if (!ids.has(id)) throw new Error('Broken section link: ' + id);
+console.log('Production files ready in dist/. JavaScript, local assets, 11 projects and section links validated.');
