@@ -9,6 +9,7 @@ import './arrival.css';
 import './refinement.css';
 import './menus.css';
 import './focus-gallery.css';
+import './polish.css';
 const origin=process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? 'https://'+process.env.VERCEL_PROJECT_PRODUCTION_URL : process.env.VERCEL_URL ? 'https://'+process.env.VERCEL_URL : 'https://usman-farooqi.vercel.app');
 const title='Usman Farooqi — Beyond the ordinary';
 const description='Web development lead and project manager in Lahore. Explore websites, digital experiences and the thinking behind their delivery.';

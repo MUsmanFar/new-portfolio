@@ -11,8 +11,8 @@ export default function Entrance({onUnavailable}:{onUnavailable:()=>void}){
   const small=matchMedia('(max-width: 760px)').matches;
   const constrained=small||((navigator as Navigator & {deviceMemory?:number}).deviceMemory??8)<=4;
   let renderer:THREE.WebGLRenderer;
-  try{renderer=new THREE.WebGLRenderer({alpha:true,antialias:!constrained,powerPreference:'low-power'});}catch{onUnavailable();return}
-  renderer.setPixelRatio(Math.min(devicePixelRatio,constrained?1:1.5));renderer.setClearColor(0x0b0e0b,1);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
+  try{renderer=new THREE.WebGLRenderer({alpha:true,antialias:!constrained,powerPreference:constrained?'low-power':'high-performance'});}catch{onUnavailable();return}
+  renderer.setPixelRatio(Math.min(devicePixelRatio,constrained?1:1.25));renderer.setClearColor(0x0b0e0b,1);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
   renderer.shadowMap.enabled=!constrained;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   mount.appendChild(renderer.domElement);
   const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x0b0e0b,.048);
@@ -33,7 +33,7 @@ export default function Entrance({onUnavailable}:{onUnavailable:()=>void}){
   // Repeating structural frames create depth as the camera enters the room.
   for(let i=0;i<4;i++){const z=-3-i*3;box(.11,5.3,.14,frame,-2.8,2.65,z);box(.11,5.3,.14,frame,2.8,2.65,z);box(5.7,.07,.14,frame,0,5.28,z);box(.035,.02,2.7,glow,-2.6,.02,z);box(.035,.02,2.7,glow,2.6,.02,z)}
   const ambient=new THREE.HemisphereLight(0xd8e9c6,0x101710,1.4);scene.add(ambient);
-  const key=new THREE.SpotLight(0xcfff8a,55,25,Math.PI/5,.65,1);key.position.set(1.2,5,3);key.target.position.set(0,1,-3);key.castShadow=!constrained;key.shadow.mapSize.set(1024,1024);scene.add(key,key.target);
+  const key=new THREE.SpotLight(0xcfff8a,55,25,Math.PI/5,.65,1);key.position.set(1.2,5,3);key.target.position.set(0,1,-3);key.castShadow=!constrained;key.shadow.mapSize.set(512,512);scene.add(key,key.target);
   const rim=new THREE.PointLight(0xa4ff52,24,13,1.4);rim.position.set(0,3,-5);scene.add(rim);
   const fill=new THREE.PointLight(0x91bde0,5,10,1);fill.position.set(-3,3,-2);scene.add(fill);
   const plinth=box(2.4,.16,1.5,frame,0,.08,-4.6);
@@ -58,7 +58,7 @@ export default function Entrance({onUnavailable}:{onUnavailable:()=>void}){
   const state={progress:0};const entry=mount.closest('.entrance');
   gsap.registerPlugin(ScrollTrigger);
   const tween=gsap.to(state,{progress:1,ease:'none',scrollTrigger:{trigger:entry,start:'top top',end:'bottom bottom',scrub:constrained?.3:.7},onUpdate:()=>{dirty=true}});
-  const mouse={x:0,y:0};
+  const mouse={x:0,y:0},smoothMouse={x:0,y:0};
   const pointer=(e:PointerEvent)=>{if(constrained||e.pointerType!=='mouse')return;mouse.x=(e.clientX/innerWidth-.5)*.14;mouse.y=(e.clientY/innerHeight-.5)*.08;dirty=true};
   const resize=()=>{const w=mount.clientWidth,h=mount.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.fov=w<760?58:43;camera.updateProjectionMatrix();dirty=true};
   const ro=new ResizeObserver(resize);ro.observe(mount);resize();
@@ -69,8 +69,10 @@ export default function Entrance({onUnavailable}:{onUnavailable:()=>void}){
   const render=(time:number)=>{
    if(!visible||document.hidden)return;
    const p=state.progress,characterInView=loaded&&p>.16&&p<.98;
-   if(!dirty&&!characterInView)return;
-   if(characterInView&&!dirty&&time-lastFrame<1/(constrained?24:40))return;
+   const pointerMoving=Math.abs(mouse.x-smoothMouse.x)+Math.abs(mouse.y-smoothMouse.y)>.0001;
+   if(!dirty&&!characterInView&&!pointerMoving)return;
+   const delta=Math.min(time-lastFrame,.05),blend=1-Math.exp(-delta*10);
+   smoothMouse.x+=(mouse.x-smoothMouse.x)*blend;smoothMouse.y+=(mouse.y-smoothMouse.y)*blend;
    lastFrame=time;dirty=false;
    // Animate the intact cutout gently; do not warp the face or invent a facial rig.
    const breathe=Math.sin(time*1.5),sway=Math.sin(time*.75);
@@ -78,7 +80,7 @@ export default function Entrance({onUnavailable}:{onUnavailable:()=>void}){
    character.rotation.z=characterInView?sway*.006:0;
    character.scale.setScalar(characterInView?1+breathe*.0025:1);
    const opening=THREE.MathUtils.smoothstep(p,.05,.52);left.rotation.y=-opening*1.55;right.rotation.y=opening*1.55;
-   const forward=THREE.MathUtils.smoothstep(p,.3,1);camera.position.set(mouse.x+forward*.35,1.9+mouse.y+forward*.1,(small?10.5:9)-forward*9.5);camera.lookAt(forward*.5,2.3,-5);
+   const forward=THREE.MathUtils.smoothstep(p,.3,1);camera.position.set(smoothMouse.x+forward*.35,1.9+smoothMouse.y+forward*.1,(small?10.5:9)-forward*9.5);camera.lookAt(forward*.5,2.3,-5);
    characterGroup.position.z=-4.6+THREE.MathUtils.smoothstep(p,.2,.68)*1.1;characterGroup.rotation.y=-forward*.1+(characterInView?sway*.018:0);
    key.intensity=55+opening*80;rim.intensity=24+opening*55;fill.intensity=5+forward*18;rim.color.setHSL(.23-forward*.1,.9,.64);renderer.toneMappingExposure=1.05+opening*.27;
    plinth.visible=p<.96;character.visible=loaded;renderer.render(scene,camera);if(loaded&&!announced){announced=true;window.dispatchEvent(new Event('portfolio:scene-ready'))}if(previous<0){mount.style.opacity='1';previous=p}

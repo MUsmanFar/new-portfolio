@@ -91,6 +91,16 @@ export const services = [
     title: "Project Coordination",
     body: "Client communication, team coordination, planning, and delivery from first brief to successful handoff.",
   },
+  {
+    index: "07",
+    title: "Custom-Coded Websites",
+    body: "Bespoke websites built around your business, with tailored interfaces, responsive layouts, and the functionality your project needs.",
+  },
+  {
+    index: "08",
+    title: "Chatbots & Conversational AI",
+    body: "Custom chatbots that answer common questions, guide visitors, and capture enquiries — integrated into your website for a more helpful customer experience.",
+  },
 ] as const;
 
 export const experience = [
