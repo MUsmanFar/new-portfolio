@@ -2,6 +2,12 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "buildCommand": "npm run build",
+  "rewrites": [
+    {
+      "source": "/google3789d32923740e00.html",
+      "destination": "/google3789d32923740e00"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
