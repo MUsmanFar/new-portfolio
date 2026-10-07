@@ -21,7 +21,7 @@ export default function Portfolio(){
  const [loading,setLoading]=useState(true);
  const finishLoading=useCallback(()=>{setLoading(false)},[]);
  const [motion,setMotion]=useState(true),[selected,setSelected]=useState<Project|null>(null),[active,setActive]=useState('home');
- useEffect(()=>{let saved:string|null=null;try{saved=localStorage.getItem('cinematic-motion')}catch{}setMotion(saved?saved==='on':!matchMedia('(prefers-reduced-motion: reduce)').matches);const media=matchMedia('(prefers-reduced-motion: reduce)');const change=()=>{let explicit=false;try{explicit=localStorage.getItem('cinematic-motion')!==null}catch{}if(!explicit)setMotion(!media.matches)};media.addEventListener('change',change);return()=>media.removeEventListener('change',change)},[]);
+ useEffect(()=>{const media=matchMedia('(prefers-reduced-motion: reduce)');setMotion(!media.matches);const change=()=>setMotion(!media.matches);media.addEventListener('change',change);return()=>media.removeEventListener('change',change)},[]);
  useEffect(()=>{
   gsap.registerPlugin(ScrollTrigger);
   const lenis=motion?new Lenis({duration:1.05,smoothWheel:true,syncTouch:false,anchors:true,prevent:node=>node.tagName==='DIALOG'}):null;
@@ -35,7 +35,7 @@ export default function Portfolio(){
     const reveal=gsap.timeline({scrollTrigger:{trigger:'.entrance',start:'28% top',end:'bottom bottom',scrub:true}});
     reveal.fromTo('.person-copy',{autoAlpha:0,y:45},{autoAlpha:1,y:0,duration:.5}).to('.person-copy',{autoAlpha:0,y:-35,duration:.3},1.1);
     gsap.utils.toArray<HTMLElement>('.reveal').forEach(el=>gsap.fromTo(el,{y:35,opacity:.3},{y:0,opacity:1,scrollTrigger:{trigger:el,start:'top 95%',end:'top 75%',scrub:true}}));
-    responsive.add('(min-width: 900px) and (min-height: 700px)',()=>{
+    responsive.add('all',()=>{
      const about=gsap.timeline({scrollTrigger:{trigger:'.about-grid',start:'top 65%',end:'bottom 65%',scrub:.8}});
      about.fromTo('.about-portrait',{clipPath:'inset(0% 48% 0% 48%)'},{clipPath:'inset(0% 0% 0% 0%)',duration:1})
       .fromTo('.about-portrait img',{scale:1.4,filter:'grayscale(1)'},{scale:1,filter:'grayscale(0)',duration:1.5},0)
@@ -55,10 +55,9 @@ export default function Portfolio(){
  },[motion]);
  useEffect(()=>{if(selected){dialog.current?.showModal();document.body.style.overflow='hidden'}return()=>{document.body.style.overflow=''}},[selected]);
  const sceneUnavailable=useCallback(()=>setMotion(false),[]);
- const toggle=()=>{setMotion(!motion);try{localStorage.setItem('cinematic-motion',motion?'off':'on')}catch{}};
  return <><Preloader onComplete={finishLoading}/><PortfolioCursor enabled={motion&&!loading}/><div ref={root} inert={loading} className={motion?'portfolio':'portfolio still'}>
   <a className="skip" href="#projects">Skip to work</a><div className="progress-line"/>
-  <header className="navigation"><a className="wordmark" href="#home" aria-label="Usman Farooqi home">uf<span>®</span></a><nav aria-label="Main navigation">{[['projects','Work'],['about','About'],['experience','Experience']].map(([id,label])=><a key={id} href={'#'+id} aria-current={active===id?'location':undefined}>{label}</a>)}</nav><div className="nav-actions"><button onClick={toggle} className="motion-button" aria-pressed={!motion} aria-label={motion?'Reduce motion':'Enable cinematic motion'}><span className={motion?'status-dot':'status-dot off'}/><span>Motion {motion?'on':'off'}</span></button><a className="talk" href="#contact">Let’s talk <span><ArrowIcon/></span></a></div></header>
+  <header className="navigation"><a className="wordmark" href="#home" aria-label="Usman Farooqi home">uf<span>®</span></a><nav aria-label="Main navigation">{[['projects','Work'],['about','About'],['experience','Experience']].map(([id,label])=><a key={id} href={'#'+id} aria-current={active===id?'location':undefined}>{label}</a>)}</nav><div className="nav-actions"><a className="talk" href="#contact">Let’s talk <span><ArrowIcon/></span></a></div></header>
   <main>
    <section className="entrance" id="home"><div className="entrance-stage"><div className="scene-fallback" aria-hidden="true"><img src="/assets/portal.webp" alt=""/></div>{motion&&<Entrance onUnavailable={sceneUnavailable}/>}<div className="scene-vignette"/><div className="intro-copy"><p className="eyebrow"><span/> USMAN FAROOQI — DIGITAL EXPERIENCES</p><h1>Beyond<br/>the <em>ordinary.</em></h1><div className="intro-bottom"><p>Thoughtfully built.<br/>Carefully led.<br/>Made to move you.</p><a className="circle" href="#projects" aria-label="Explore my work"><ArrowIcon/></a></div></div><div className="person-copy"><p className="eyebrow">THE PERSON BEHIND THE PIXELS</p><h2>Ideas meet<br/><em>execution.</em></h2><p>I’m Usman. Web development lead,<br/>project manager, and your partner<br/>from first idea to final launch.</p><a href="#about">A little about me ↗</a></div><div className="entrance-footer"><span>LAHORE, PAKISTAN<br/>WORKING ACROSS BORDERS</span><a href={motion?'#inside':'#projects'}>{motion?'SCROLL TO STEP INSIDE':'EXPLORE THE WORK'} <b>↓</b></a><span>01 — THE ENTRANCE</span></div></div><div id="inside" className="inside-anchor"/></section>
    <ProcessReel motion={motion}/><section id="projects" className="work section"><div className="section-label"><span>02 / SELECTED WORK</span><span>IDEAS, OUT IN THE WORLD</span></div><ProjectTheatre motion={motion} onSelect={setSelected}/></section>

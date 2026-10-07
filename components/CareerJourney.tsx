@@ -16,7 +16,7 @@ export default function CareerJourney({ motion }: { motion: boolean }) {
   gsap.registerPlugin(ScrollTrigger);
   const media = gsap.matchMedia();
   const ctx = gsap.context(() => {
-   media.add('(min-width: 900px) and (min-height: 700px)', () => {
+   media.add('all', () => {
     const section = root.current!;
     section.classList.add('career-enhanced');
     const panels = gsap.utils.toArray<HTMLElement>('.career-panel', section);
@@ -39,11 +39,6 @@ export default function CareerJourney({ motion }: { motion: boolean }) {
     gsap.to('.career-light', { xPercent: 50, rotation: 30, ease: 'none', scrollTrigger: { trigger: '.career-track', start: 'top bottom', end: 'bottom top', scrub: true } });
     ScrollTrigger.refresh();
     return () => { section.classList.remove('career-enhanced'); panels.forEach(panel => { panel.inert = false; panel.removeAttribute('aria-hidden'); }); };
-   });
-   media.add('(max-width: 899px), (max-height: 699px)', () => {
-    gsap.utils.toArray<HTMLElement>('.career-panel', root.current!).forEach(panel => {
-     gsap.fromTo(panel, { y: 55, opacity: .3 }, { y: 0, opacity: 1, scrollTrigger: { trigger: panel, start: 'top 95%', end: 'top 35%', scrub: .3 } });
-    });
    });
   }, root);
   return () => { media.revert(); ctx.revert(); };

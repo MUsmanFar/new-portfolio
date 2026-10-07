@@ -39,7 +39,7 @@ export default function Entrance({onUnavailable}:{onUnavailable:()=>void}){
   const plinth=box(2.4,.16,1.5,frame,0,.08,-4.6);
   const characterGroup=new THREE.Group();characterGroup.position.set(0,2,-4.6);scene.add(characterGroup);
   let alive=true,visible=true,dirty=true,loaded=false;
-  const texture=new THREE.TextureLoader().load('/assets/usman-cutout.webp',()=>{if(!alive)return;loaded=true;dirty=true;});texture.colorSpace=THREE.SRGBColorSpace;resources.push(texture);
+  const texture=new THREE.TextureLoader().load('/assets/usman-green-cutout.webp',()=>{if(!alive)return;loaded=true;dirty=true;});texture.colorSpace=THREE.SRGBColorSpace;resources.push(texture);
   const portraitMat=new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.03,depthWrite:false,toneMapped:false,side:THREE.DoubleSide});resources.push(portraitMat);
   const portraitGeo=new THREE.PlaneGeometry(3.5*(900/920),3.5);resources.push(portraitGeo);const character=new THREE.Mesh(portraitGeo,portraitMat);characterGroup.add(character);
   // Alpha-derived rim follows the actual silhouette, without changing the portrait pixels.

@@ -16,7 +16,7 @@ export default function ProjectTheatre({ motion, onSelect }: { motion: boolean; 
   gsap.registerPlugin(ScrollTrigger);
   const media=gsap.matchMedia();
   const ctx=gsap.context(()=>{
-   media.add('(min-width: 900px) and (min-height: 600px)',()=>{
+   media.add('all',()=>{
     const el=root.current!; el.classList.add('collection-live');
     const cards=Array.from(el.querySelectorAll<HTMLElement>('.collection-card'));
     const controls=el.querySelector<HTMLElement>('.collection-controls')!;

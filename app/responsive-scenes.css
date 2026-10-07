@@ -1,0 +1,83 @@
+/* The same scroll scenes on every screen; only composition changes. */
+.career-enhanced .career-stage{overflow:clip}
+@media(max-width:999px){
+ .services{display:block}
+ .services details{position:sticky;top:calc(90px + var(--service-step,0)*8px);margin-bottom:18px}
+ .services details:nth-child(2){--service-step:1}.services details:nth-child(3){--service-step:2}.services details:nth-child(4){--service-step:3}.services details:nth-child(5){--service-step:4}.services details:nth-child(6){--service-step:5}.services details:nth-child(7){--service-step:6}.services details:nth-child(8){--service-step:7}
+ .services-heading{position:relative;top:auto;z-index:2;background:#151b12;padding-bottom:20px}
+}
+@media(max-width:899px),(max-height:699px){
+ .reel-live .reel-stage{height:calc(100svh - 86px);padding:14px 5% 18px}
+ .reel-live .reel-top{padding:4px 0 10px;font-size:9px;letter-spacing:.07em}
+ .reel-live .reel-window{margin-top:12px;perspective:1000px}
+ .reel-live .reel-panel{display:grid;grid-template-columns:1fr;grid-template-rows:auto auto;align-content:center;gap:18px;padding:22px 6%;min-height:0}
+ .reel-live .reel-copy h2{font-size:clamp(30px,6.5vw,54px);margin:14px 0}
+ .reel-live .reel-copy .eyebrow{font-size:9px;letter-spacing:.1em}
+ .reel-live .reel-copy>p:last-child{font-size:13px;line-height:1.6;margin:0}
+ .reel-live .reel-words{transform:perspective(1100px) rotateY(-7deg) rotateZ(-3deg)}
+ .reel-live .reel-words>span{padding:10px 14px;margin:7px 0;font-size:clamp(15px,3vw,23px)}
+ .reel-live .reel-stack-label{display:flex;font-size:8px;padding-top:12px;letter-spacing:.05em}
+ .collection-live .collection-stage{height:calc(100svh - 80px);padding-top:12px}
+ .collection-live .collection-heading h2{font-size:clamp(42px,9vw,82px);padding:0 4%;overflow-wrap:normal}
+ .collection-live .collection-ready p{font-size:clamp(42px,9vw,76px)}
+ .collection-live .collection-ready>span{font-size:9px;max-width:85%;line-height:1.7}
+ .collection-live .collection-card{display:grid;left:8%;width:84%;grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);gap:12px;padding:16px;align-content:start;align-items:start}
+ .collection-live .collection-visual{width:100%;max-height:100%;box-shadow:0 8px 18px #0003}
+ .collection-live .collection-image{aspect-ratio:16/9;max-height:28svh}
+ .collection-live .collection-copy{padding:0}
+ .collection-live .collection-card h3{font-size:clamp(21px,4vw,32px);margin:8px 0}
+ .collection-live .collection-card .collection-copy>p:not(.eyebrow){font-size:12px;line-height:1.6;margin:8px 0}
+ .collection-live .collection-card .collection-tags{margin:8px 0;gap:4px}
+ .collection-live .collection-open{padding:8px 12px;min-height:40px;min-width:0;font-size:12px}
+ .collection-live .collection-controls{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:8px;padding:8px 0;margin:0}
+ .collection-live .collection-chooser{grid-column:1/-1;width:100%;max-width:none;min-width:0}
+ .collection-live .collection-chooser>span{display:none}
+ .collection-live .collection-chooser .select-menu{margin:0}
+ .collection-live .collection-meter{display:none}
+ .collection-live .collection-count{font-size:10px}
+ .collection-live .collection-controls>button{width:40px;height:40px}
+ .collection-live .collection-controls>a{margin-left:0;text-align:right;font-size:10px}
+ .career-enhanced .career-stage{height:calc(100svh - 86px);min-height:0;padding:16px 5%}
+ .career-enhanced .career-stage-top{font-size:9px;padding-bottom:12px;letter-spacing:.05em}
+ .career-enhanced .career-panel{display:grid;grid-template-columns:1fr;grid-template-rows:auto auto;gap:22px;padding:16px 0;align-content:center;align-items:center}
+ .career-enhanced .career-narrative .eyebrow{font-size:9px;max-width:none}
+ .career-enhanced .career-period{font-size:21px;margin:10px 0}
+ .career-enhanced .career-narrative h3{font-size:clamp(27px,5vw,43px);margin:0 0 12px}
+ .career-enhanced .career-role{font-size:13px;line-height:1.5;margin:0}
+ .career-enhanced .career-narrative{align-self:center}
+ .career-enhanced .career-evidence{align-self:center;margin:0 auto;max-width:560px}
+ .career-enhanced .career-company-record{display:none}
+ .career-enhanced .career-evidence ul{margin:0}
+ .career-enhanced .career-point{text-align:center;padding-left:0}
+ .career-enhanced .career-point:before{position:static;display:inline-block;margin-right:10px}
+ .career-enhanced .career-point{font-size:12px;line-height:1.45;padding-block:5px}
+ .career-enhanced .career-controls{display:block;padding-top:10px;flex-shrink:0}
+ .career-enhanced .career-runway{margin-bottom:10px}
+ .career-enhanced .career-controls nav{gap:5px}
+ .career-enhanced .career-controls button{font-size:9px;padding:5px 1px;min-height:44px}
+ .career-enhanced .career-controls button span{display:block;font-size:10px;margin:0 0 3px}
+}
+@media(max-height:600px) and (min-width:600px){
+ .reel-live .reel-panel{grid-template-columns:1.2fr .8fr;grid-template-rows:1fr;gap:5%;padding:16px 4%}
+ .reel-live .reel-copy h2{font-size:28px;margin:10px 0}.reel-live .reel-copy>p:last-child{font-size:11px}
+ .reel-live .reel-words>span{font-size:14px;padding:8px;margin:6px 0}
+ .collection-live .collection-card{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:1fr;align-items:center}
+ .collection-live .collection-image{max-height:42svh}
+ .collection-live .collection-card .collection-tags{display:none}
+ .collection-live .collection-card h3{font-size:22px}
+ .collection-live .collection-controls{grid-template-columns:minmax(0,1fr) auto auto auto auto}
+ .collection-live .collection-chooser{grid-column:auto}
+ .career-enhanced .career-panel{grid-template-columns:1fr 1fr;grid-template-rows:1fr;align-items:center;gap:5%}
+ .career-enhanced .career-narrative h3{font-size:25px}.career-enhanced .career-point{font-size:10px;padding-block:3px}
+}
+@media(max-height:650px) and (max-width:599px){.collection-live .collection-card{padding:12px;gap:8px}.collection-live .collection-image{max-height:22svh}.collection-live .collection-card h3{font-size:19px;margin:5px 0}.collection-live .collection-card .collection-copy>p:not(.eyebrow){font-size:10px;line-height:1.4;margin:5px 0}.collection-live .collection-tags{display:none}.collection-live .collection-open{min-height:34px;padding:5px 10px}.reel-live .reel-panel{padding:16px 5%;gap:10px}.reel-live .reel-copy h2{font-size:28px;margin:10px 0}.reel-live .reel-words>span{padding:7px 10px}.career-enhanced .career-panel{gap:10px}.career-enhanced .career-narrative h3{font-size:25px}.career-enhanced .career-point{font-size:10px;padding-block:4px}}
+@media(max-width:380px) and (min-height:601px){.collection-live .collection-card .collection-tags{display:none}.collection-live .collection-card .collection-copy>p:not(.eyebrow){font-size:11px}.reel-live .reel-words>span{font-size:15px}.career-enhanced .career-point{font-size:11px}}
+.still .services details{position:relative;top:auto}
+
+/* Keep the project action in its card, including shallow laptop viewports. */
+.collection-live .collection-copy{min-height:0;max-height:100%;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.collection-live .collection-copy .eyebrow,.collection-live .collection-copy h3,.collection-live .collection-copy>p:not(.eyebrow),.collection-live .collection-card .collection-tags{margin:0}
+.collection-live .collection-open{flex-shrink:0;max-width:100%;margin-top:4px}
+.collection-live .collection-card{overflow:clip}
+@media(max-width:899px) and (min-height:601px){.collection-live .collection-card{grid-template-rows:minmax(0,.9fr) minmax(0,1.1fr);align-content:center}.collection-live .collection-visual{height:100%}.collection-live .collection-image{height:100%;aspect-ratio:auto;max-height:none}.collection-live .collection-copy{align-self:center;gap:7px}}
+@media(max-height:700px){.collection-live .collection-copy{gap:5px}.collection-live .collection-card .collection-tags{display:none}.collection-live .collection-card .collection-copy>p:not(.eyebrow){font-size:11px;line-height:1.4}.collection-live .collection-card h3{font-size:clamp(19px,2.5vw,29px)}.collection-live .collection-open{padding:7px 12px;min-height:34px;margin-top:0}.collection-live .collection-copy .eyebrow{font-size:8px;line-height:1.4}}

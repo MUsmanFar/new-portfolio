@@ -14,7 +14,7 @@ export default function ProcessReel({motion}:{motion:boolean}){
   if(!motion)return;
   gsap.registerPlugin(ScrollTrigger);const media=gsap.matchMedia();
   const ctx=gsap.context(()=>{
-   media.add('(min-width:900px) and (min-height:650px)',()=>{
+   media.add('all',()=>{
     const el=root.current!;el.classList.add('reel-live');
     const panels=gsap.utils.toArray<HTMLElement>('.reel-panel',el);
     gsap.set(panels.slice(1),{yPercent:110,rotationX:-12,scale:.9,autoAlpha:0});
@@ -27,9 +27,6 @@ export default function ProcessReel({motion}:{motion:boolean}){
     camera.to('.reel-stack-label',{autoAlpha:1,y:0,duration:.4},3.9);
     camera.to({}, {duration:.5});
     return()=>el.classList.remove('reel-live');
-   });
-   media.add('(max-width:899px), (max-height:649px)',()=>{
-    gsap.utils.toArray<HTMLElement>('.reel-panel',root.current).forEach(panel=>gsap.fromTo(panel,{y:45,scale:.96},{y:0,scale:1,ease:'none',scrollTrigger:{trigger:panel,start:'top 95%',end:'top 45%',scrub:.4}}));
    });
   },root);return()=>{media.revert();ctx.revert()};
  },[motion]);
