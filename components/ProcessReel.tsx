@@ -18,7 +18,7 @@ export default function ProcessReel({motion}:{motion:boolean}){
     const el=root.current!;el.classList.add('reel-live');
     const panels=gsap.utils.toArray<HTMLElement>('.reel-panel',el);
     gsap.set(panels.slice(1),{yPercent:110,rotationX:-12,scale:.9,autoAlpha:0});
-    const camera=gsap.timeline({scrollTrigger:{trigger:el,start:'top top+=86',end:'bottom bottom',scrub:.75}});
+    const camera=gsap.timeline({scrollTrigger:{trigger:el,start:'top top+=86',end:()=> 'bottom top+=' + (el.querySelector<HTMLElement>('.reel-stage')!.offsetHeight + 86),scrub:.75}});
     panels.forEach((panel,i)=>{
      if(i){camera.to(panels[i-1],{scale:.9,y:-28,z:-180,autoAlpha:0,rotationX:6,duration:.8},i*1.6-.4)
       .to(panel,{yPercent:0,rotationX:0,scale:1,autoAlpha:1,duration:1,ease:'power3.out'},i*1.6-.4)}

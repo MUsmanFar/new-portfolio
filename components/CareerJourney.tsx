@@ -21,7 +21,7 @@ export default function CareerJourney({ motion }: { motion: boolean }) {
     section.classList.add('career-enhanced');
     const panels = gsap.utils.toArray<HTMLElement>('.career-panel', section);
     const timeline = gsap.timeline({ scrollTrigger: {
-     trigger: section.querySelector('.career-track'), start: 'top top+=86', end: 'bottom bottom', scrub: .8,
+     trigger: section.querySelector('.career-track'), start: 'top top+=86', end: () => 'bottom top+=' + (section.querySelector<HTMLElement>('.career-stage')!.offsetHeight + 86), scrub: .8,
      onUpdate: self => {
       const index = Math.min(3, Math.round(self.progress * 3));
       setActive(previous => previous === index ? previous : index);

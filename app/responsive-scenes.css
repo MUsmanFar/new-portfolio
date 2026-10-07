@@ -81,3 +81,21 @@
 .collection-live .collection-card{overflow:clip}
 @media(max-width:899px) and (min-height:601px){.collection-live .collection-card{grid-template-rows:minmax(0,.9fr) minmax(0,1.1fr);align-content:center}.collection-live .collection-visual{height:100%}.collection-live .collection-image{height:100%;aspect-ratio:auto;max-height:none}.collection-live .collection-copy{align-self:center;gap:7px}}
 @media(max-height:700px){.collection-live .collection-copy{gap:5px}.collection-live .collection-card .collection-tags{display:none}.collection-live .collection-card .collection-copy>p:not(.eyebrow){font-size:11px;line-height:1.4}.collection-live .collection-card h3{font-size:clamp(19px,2.5vw,29px)}.collection-live .collection-open{padding:7px 12px;min-height:34px;margin-top:0}.collection-live .collection-copy .eyebrow{font-size:8px;line-height:1.4}}
+
+/* Full-height mobile stages, with compact cards centred inside the scene. */
+@media(max-width:599px) and (min-height:701px){
+ .reel-live .reel-stage{height:calc(100svh - 86px)}
+ .reel-live .reel-panel{padding:28px 6%;gap:20px}
+ .reel-live .reel-window{margin-top:8px;display:flex;align-items:center}
+ .reel-live .reel-rail{height:min(100%,560px);flex-shrink:0}
+ .collection-live .collection-stage{height:calc(100svh - 80px);background:radial-gradient(ellipse at 50% 55%,#46602b1c,transparent 70%),#0b0e0b}
+ .collection-live .collection-window{display:flex;align-items:center}
+ .collection-live .collection-rail{height:min(100%,550px);flex-shrink:0}
+ .collection-live .collection-card{grid-template-rows:auto auto;align-content:center;gap:22px;padding:16px;height:100%}
+ .collection-live .collection-visual{height:auto;align-self:start}
+ .collection-live .collection-image{height:auto;aspect-ratio:16/10;max-height:230px}
+ .collection-live .collection-copy{align-self:start;gap:9px}
+ .career-enhanced .career-stage{height:calc(100svh - 86px)}
+ .career-enhanced .career-panel{gap:22px;padding:20px 0}
+ .career-enhanced .career-watermark{top:12%;font-size:clamp(150px,40vw,220px)}
+}
