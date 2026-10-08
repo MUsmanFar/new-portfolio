@@ -23,6 +23,9 @@ export default function Portfolio(){
  useEffect(()=>{const media=matchMedia('(prefers-reduced-motion: reduce)');setMotion(!media.matches);const change=()=>setMotion(!media.matches);media.addEventListener('change',change);return()=>media.removeEventListener('change',change)},[]);
  useEffect(()=>{
   gsap.registerPlugin(ScrollTrigger);
+  // Mobile browser chrome changes height while scrolling; rebuilding every pin
+  // during that gesture produces a visible jump between work collections.
+  ScrollTrigger.config({ignoreMobileResize:true});
   const lenis=motion?new Lenis({duration:1.05,smoothWheel:true,syncTouch:false,anchors:true,prevent:node=>node.tagName==='DIALOG'}):null;
   const jumpChapter=(event:Event)=>{const top=(event as CustomEvent<number>).detail;if(lenis){lenis.resize();lenis.scrollTo(top,{immediate:true})}else window.scrollTo({top,behavior:'instant'})};
   window.addEventListener('portfolio:chapter',jumpChapter);

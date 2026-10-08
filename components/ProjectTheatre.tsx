@@ -40,7 +40,7 @@ export default function ProjectTheatre({ motion, onSelect, projects, collectionI
     gsap.set('.collection-ready',{autoAlpha:0,scale:.8});
     gsap.set(controls,{autoAlpha:0});controls.inert=true;
     cards.forEach(card=>{card.inert=true;card.setAttribute('aria-hidden','true')});
-    const story=gsap.timeline({scrollTrigger:{trigger:el,start:'top top+=80',end:()=>'+='+(innerHeight*(first?1.6:.65)+(projects.length-1)*Math.max(320,innerHeight*.52)),pin:el.querySelector('.collection-stage'),scrub:.55,invalidateOnRefresh:true},onUpdate:()=>{
+    const story=gsap.timeline({scrollTrigger:{trigger:el,start:'top top+=80',end:()=>{const height=el.querySelector<HTMLElement>('.collection-stage')!.clientHeight+80;return '+='+(height*(first?1.6:.65)+(projects.length-1)*Math.max(320,height*.52))},pin:el.querySelector('.collection-stage'),anticipatePin:1,scrub:.55,invalidateOnRefresh:true,onToggle:self=>el.classList.toggle('collection-active',self.isActive)},onUpdate:()=>{
      placeCards();syncAccess(Math.round(playhead.index),story.time()<INTRO);
     }});
     if(first){
@@ -59,7 +59,7 @@ export default function ProjectTheatre({ motion, onSelect, projects, collectionI
     story.fromTo(playhead,{index:0},{index:cards.length-1,duration:(cards.length-1)*STEP,ease:'none',immediateRender:false},INTRO+REVEAL);
     story.to({}, {duration:TAIL});
     trigger.current=story.scrollTrigger!;
-    return()=>{trigger.current=null;el.classList.remove('collection-live');controls.inert=false;cards.forEach(card=>{card.inert=false;card.removeAttribute('aria-hidden');card.classList.remove('is-current')})};
+    return()=>{trigger.current=null;el.classList.remove('collection-live','collection-active');controls.inert=false;cards.forEach(card=>{card.inert=false;card.removeAttribute('aria-hidden');card.classList.remove('is-current')})};
    });
   },root);
   return()=>{media.revert();ctx.revert()};
