@@ -23,7 +23,14 @@ export default function ProjectTheatre({ motion, onSelect, projects, collectionI
     const stage=el.querySelector<HTMLElement>('.collection-stage')!;
     el.classList.toggle('collection-native',nativeSticky);
     const scrollDistance=()=>{const height=stage.clientHeight+80;return height*(first?1.6:.65)+(projects.length-1)*Math.max(320,height*.52)};
-    const sizeSticky=()=>{if(nativeSticky)el.style.height=(stage.clientHeight+scrollDistance())+'px'};
+    let stageWidth=0;
+    const sizeSticky=()=>{
+     if(!nativeSticky)return;
+     // iOS browser bars resize the visual viewport mid-swipe. Keep the theatre
+     // and its scroll distance at one height until the actual screen width changes.
+     if(stageWidth!==innerWidth){stage.style.removeProperty('height');stage.style.height=stage.clientHeight+'px';stageWidth=innerWidth}
+     el.style.height=(stage.clientHeight+scrollDistance())+'px';
+    };
     sizeSticky();
     const cards=Array.from(el.querySelectorAll<HTMLElement>('.collection-card'));
     const controls=el.querySelector<HTMLElement>('.collection-controls')!;
@@ -65,7 +72,7 @@ export default function ProjectTheatre({ motion, onSelect, projects, collectionI
     story.fromTo(playhead,{index:0},{index:cards.length-1,duration:(cards.length-1)*STEP,ease:'none',immediateRender:false},INTRO+REVEAL);
     story.to({}, {duration:TAIL});
     trigger.current=story.scrollTrigger!;
-    return()=>{trigger.current=null;el.style.removeProperty('height');el.classList.remove('collection-live','collection-active','collection-native');controls.inert=false;cards.forEach(card=>{card.inert=false;card.removeAttribute('aria-hidden');card.classList.remove('is-current')})};
+    return()=>{trigger.current=null;el.style.removeProperty('height');stage.style.removeProperty('height');el.classList.remove('collection-live','collection-active','collection-native');controls.inert=false;cards.forEach(card=>{card.inert=false;card.removeAttribute('aria-hidden');card.classList.remove('is-current')})};
    });
   },root);
   return()=>{media.revert();ctx.revert()};
