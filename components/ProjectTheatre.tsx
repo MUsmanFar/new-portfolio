@@ -17,8 +17,14 @@ export default function ProjectTheatre({ motion, onSelect, projects, collectionI
   gsap.registerPlugin(ScrollTrigger);
   const media=gsap.matchMedia();
   const ctx=gsap.context(()=>{
-   media.add('all',()=>{
+   media.add({mobile:'(max-width: 899px)',desktop:'(min-width: 900px)'},context=>{
     const el=root.current!; el.classList.add('collection-live');
+    const nativeSticky=Boolean(context.conditions?.mobile);
+    const stage=el.querySelector<HTMLElement>('.collection-stage')!;
+    el.classList.toggle('collection-native',nativeSticky);
+    const scrollDistance=()=>{const height=stage.clientHeight+80;return height*(first?1.6:.65)+(projects.length-1)*Math.max(320,height*.52)};
+    const sizeSticky=()=>{if(nativeSticky)el.style.height=(stage.clientHeight+scrollDistance())+'px'};
+    sizeSticky();
     const cards=Array.from(el.querySelectorAll<HTMLElement>('.collection-card'));
     const controls=el.querySelector<HTMLElement>('.collection-controls')!;
     const playhead={index:0};
@@ -40,7 +46,7 @@ export default function ProjectTheatre({ motion, onSelect, projects, collectionI
     gsap.set('.collection-ready',{autoAlpha:0,scale:.8});
     gsap.set(controls,{autoAlpha:0});controls.inert=true;
     cards.forEach(card=>{card.inert=true;card.setAttribute('aria-hidden','true')});
-    const story=gsap.timeline({scrollTrigger:{trigger:el,start:'top top+=80',end:()=>{const height=el.querySelector<HTMLElement>('.collection-stage')!.clientHeight+80;return '+='+(height*(first?1.6:.65)+(projects.length-1)*Math.max(320,height*.52))},pin:el.querySelector('.collection-stage'),anticipatePin:1,scrub:.55,invalidateOnRefresh:true,onToggle:self=>el.classList.toggle('collection-active',self.isActive)},onUpdate:()=>{
+    const story=gsap.timeline({scrollTrigger:{trigger:el,start:'top top+=80',end:()=>'+='+scrollDistance(),pin:nativeSticky?false:stage,anticipatePin:nativeSticky?0:1,scrub:nativeSticky?true:.55,invalidateOnRefresh:true,onRefreshInit:sizeSticky,onToggle:self=>el.classList.toggle('collection-active',self.isActive)},onUpdate:()=>{
      placeCards();syncAccess(Math.round(playhead.index),story.time()<INTRO);
     }});
     if(first){
@@ -59,7 +65,7 @@ export default function ProjectTheatre({ motion, onSelect, projects, collectionI
     story.fromTo(playhead,{index:0},{index:cards.length-1,duration:(cards.length-1)*STEP,ease:'none',immediateRender:false},INTRO+REVEAL);
     story.to({}, {duration:TAIL});
     trigger.current=story.scrollTrigger!;
-    return()=>{trigger.current=null;el.classList.remove('collection-live','collection-active');controls.inert=false;cards.forEach(card=>{card.inert=false;card.removeAttribute('aria-hidden');card.classList.remove('is-current')})};
+    return()=>{trigger.current=null;el.style.removeProperty('height');el.classList.remove('collection-live','collection-active','collection-native');controls.inert=false;cards.forEach(card=>{card.inert=false;card.removeAttribute('aria-hidden');card.classList.remove('is-current')})};
    });
   },root);
   return()=>{media.revert();ctx.revert()};
