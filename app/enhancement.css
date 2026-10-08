@@ -46,7 +46,7 @@
 .directory-card .directory-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 .directory-card .chapter-number{font-size:9px;letter-spacing:.14em;color:#a3b68c}
 .directory-card .chapter-icon{display:grid;place-items:center;width:44px;height:44px;border:1px solid #b4d08b44;border-radius:13px;color:#d7ecb5;background:linear-gradient(140deg,#93b45722,#93b45705);box-shadow:inset 0 1px 0 #ffffff0d}
-.directory-card .chapter-icon svg{width:25px;height:25px}
+.directory-card .chapter-icon svg{display:block;grid-area:auto;width:25px;height:25px;margin:0;justify-self:center;align-self:center}
 .directory-card .chapter-label{font-size:8px;letter-spacing:.15em;color:#8b9f75;margin-bottom:9px}
 .directory-card .chapter-title{font-size:clamp(19px,1.6vw,26px);font-weight:500;letter-spacing:-.035em;line-height:1.22;color:#eef3e5;margin-bottom:9px}
 .directory-card .chapter-description{font-size:12px;line-height:1.6;color:#a9b69d;margin-bottom:24px}

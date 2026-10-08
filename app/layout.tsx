@@ -16,7 +16,8 @@ import './enhancement.css';
 const title=seoTitle;
 const description=seoDescription;
 export const metadata: Metadata = {
- metadataBase:new URL(siteUrl),title,description,
+ metadataBase:new URL(siteUrl),title,description,applicationName:'Usman Farooqi',
+ icons:{icon:[{url:'/favicon.ico',sizes:'any'},{url:'/favicon.png',sizes:'192x192',type:'image/png'}],shortcut:'/favicon.ico'},
  alternates:{canonical:'/'},
  authors:[{name:'Usman Farooqi',url:siteUrl}],
  verification:{google:'iHfdvGYJug6FRYh1hS--ZK3dpwaQX9awlt_gKJKx4-Y'},
