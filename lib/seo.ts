@@ -2,8 +2,8 @@ import { services, site } from './content';
 
 // Keep search identity on the public domain, including builds on preview URLs.
 export const siteUrl = 'https://usman-farooqi.vercel.app';
-export const seoTitle = 'Usman Farooqi | Web Developer & AI Chatbots in Lahore';
-export const seoDescription = 'Usman Farooqi, web developer and project manager in Lahore, Pakistan. Custom-coded websites, WordPress development, AI chatbots and website management.';
+export const seoTitle = 'Usman Farooqi | WordPress, Shopify & Vibe Coding';
+export const seoDescription = 'Usman Farooqi, web developer and project manager in Lahore, Pakistan. WordPress and Shopify websites, Vibe Coding, interactive portfolios and technical project management.';
 
 export const structuredData = {
   '@context': 'https://schema.org',
@@ -15,7 +15,7 @@ export const structuredData = {
       image: `${siteUrl}/assets/usman-portrait.jpg`,
       sameAs: [site.linkedin],
       homeLocation: { '@type': 'Place', name: site.location },
-      knowsAbout: ['Web development', 'WordPress', 'Custom website development', 'AI chatbots', 'Website management', 'Project management'],
+      knowsAbout: ['Web development', 'WordPress', 'Shopify', 'Vibe Coding', 'Interactive portfolios', 'Graphic design', 'UGC content', 'AI video generation', 'Website management', 'Project management'],
     },
     {
       '@type': 'WebSite', '@id': `${siteUrl}/#website`,

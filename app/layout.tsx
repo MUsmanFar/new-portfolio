@@ -12,6 +12,7 @@ import './menus.css';
 import './focus-gallery.css';
 import './polish.css';
 import './responsive-scenes.css';
+import './enhancement.css';
 const title=seoTitle;
 const description=seoDescription;
 export const metadata: Metadata = {
