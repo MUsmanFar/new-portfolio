@@ -9,6 +9,29 @@ export default function ProjectGallery({projects,collectionId,onSelect,motion}:{
  const [active,setActive]=useState(0);
  const stacked=motion&&collectionId!=='managed';
  useEffect(()=>{
+  const index=root.current?.querySelector<HTMLElement>('.exhibit-index');
+  const nav=index?.querySelector<HTMLElement>('nav');
+  const tab=nav?.querySelector<HTMLElement>('[aria-current="location"]');
+  if(!index||!nav||!tab)return;
+  // Scroll only the index, never the page or its sticky project cards.
+  const syncTab=()=>{
+   const bounds=tab.getBoundingClientRect();
+   const behavior=motion?'smooth':'instant';
+   if(getComputedStyle(nav).flexDirection==='row'){
+    const viewport=nav.getBoundingClientRect();
+    nav.scrollTo({left:nav.scrollLeft+bounds.left-viewport.left-(nav.clientWidth-bounds.width)/2,behavior});
+   }else{
+    const viewport=index.getBoundingClientRect();
+    if(bounds.top<viewport.top||bounds.bottom>viewport.bottom){
+     index.scrollTo({top:index.scrollTop+bounds.top-viewport.top-(index.clientHeight-bounds.height)/2,behavior});
+    }
+   }
+  };
+  syncTab();
+  window.addEventListener('resize',syncTab);
+  return()=>window.removeEventListener('resize',syncTab);
+ },[active,motion]);
+ useEffect(()=>{
   const cards=Array.from(root.current?.querySelectorAll<HTMLElement>('.exhibit-card')||[]);
   let frame=0,visible=false;
   const update=()=>{frame=0;if(!visible)return;const line=innerHeight*.46;let index=0;cards.forEach((card,i)=>{if(card.getBoundingClientRect().top<=line)index=i});setActive(index)};

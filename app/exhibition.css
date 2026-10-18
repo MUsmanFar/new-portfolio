@@ -72,3 +72,6 @@
  .exhibition-stack .exhibit-tags,.exhibition-stack .exhibit-caption{display:none}
  .exhibition-stack .exhibit-title h3{font-size:20px}
 }
+/* Keep the current project unmistakable as the index follows the cards. */
+.exhibit-index nav a[aria-current]{color:#d0ff71;font-weight:600}
+@media(max-width:760px){.exhibit-index nav a[aria-current]{background:#d0ff71;color:#172211;border-color:#d0ff71}}
