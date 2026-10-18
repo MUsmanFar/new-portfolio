@@ -22,13 +22,14 @@ export default function ProjectGallery({projects,collectionId,onSelect,motion}:{
  },[]);
  return <div ref={root} className={'project-exhibition'+(motion?' exhibition-motion':'')+(stacked?' exhibition-stack':'')}>
   <aside className="exhibit-index" data-lenis-prevent><span className="eyebrow">IN THIS COLLECTION</span><div className="exhibit-count"><strong>{String(active+1).padStart(2,'0')}</strong><span>/ {String(projects.length).padStart(2,'0')}</span></div><nav aria-label={collectionId+' project index'}>{projects.map((project,i)=><a href={'#exhibit-'+project.id} key={project.id} onClick={event=>{
-    if(!stacked||!matchMedia('(min-width:761px) and (min-height:600px) and (prefers-reduced-motion:no-preference)').matches)return;
+    if(!stacked||!matchMedia('(prefers-reduced-motion:no-preference)').matches)return;
     const grid=root.current?.querySelector<HTMLElement>('.exhibit-grid');
     if(!grid)return;
     event.preventDefault();event.stopPropagation();
     const cards=Array.from(grid.children) as HTMLElement[];
     const gap=parseFloat(getComputedStyle(grid).rowGap)||0;
-    const top=scrollY+grid.getBoundingClientRect().top+cards.slice(0,i).reduce((sum,card)=>sum+card.offsetHeight+gap,0)-105;
+    const inset=parseFloat(getComputedStyle(cards[i]).top)||0;
+    const top=scrollY+grid.getBoundingClientRect().top+cards.slice(0,i).reduce((sum,card)=>sum+card.offsetHeight+gap,0)-inset;
     history.replaceState(null,'','#exhibit-'+project.id);
     window.dispatchEvent(new CustomEvent('portfolio:chapter',{detail:top}));
    }} aria-current={i===active?'location':undefined}><span>{String(i+1).padStart(2,'0')}</span>{project.title}<span aria-hidden="true">↗</span></a>)}</nav><p>A closer look at the work.<br/>Open a project for the full story.</p></aside>
