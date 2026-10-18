@@ -2,18 +2,19 @@
 import {ArrowIcon,CloseIcon} from './UiIcons';
 import {useRef,useState} from 'react';
 import SelectMenu from './SelectMenu';
+import {tellCompanion} from '@/lib/companion';
 import {submitContact,type ContactDetails} from '@/lib/contact';
 export default function ContactForm(){
  const [status,setStatus]=useState<'idle'|'sending'|'success'|'error'>('idle');
  const busy=useRef(false);
- return <form className="contact-panel" aria-busy={status==='sending'} onSubmit={async event=>{
+ return <form className="contact-panel" aria-busy={status==='sending'} onInvalidCapture={()=>tellCompanion('A little detail is missing. Check the highlighted field and we’ll try again.','concerned')} onFocusCapture={event=>{if(event.target instanceof HTMLTextAreaElement&&event.target.name==='message')tellCompanion('The idea, the audience, the ambition. A few details help Usman plan your next step.','thinking')}} onSubmit={async event=>{
   event.preventDefault();if(busy.current)return;
   const form=event.currentTarget,data=new FormData(form);
   if(data.get('website'))return;
   const details=Object.fromEntries(['name','email','growth_call','timeline','message'].map(key=>[key,String(data.get(key)||'').trim()])) as ContactDetails;
-  if(Object.values(details).some(value=>!value)){setStatus('error');return}
-  busy.current=true;setStatus('sending');
-  try{await submitContact(details);form.reset();setStatus('success')}catch{setStatus('error')}finally{busy.current=false}
+  if(Object.values(details).some(value=>!value)){setStatus('error');tellCompanion('Please fill in each field so Usman has everything he needs.','concerned');return}
+  busy.current=true;setStatus('sending');tellCompanion('Sending your idea. One little moment…','thinking');
+  try{await submitContact(details);form.reset();setStatus('success');tellCompanion('It’s sent! Your next chapter has a lovely beginning.','celebrate')}catch{setStatus('error');tellCompanion('That didn’t go through. Please try again, or use Usman’s email link.','concerned')}finally{busy.current=false}
  }}>
   <div className="contact-form-heading"><span>YOUR NEXT CHAPTER</span><h3>Tell me about<br/><em>your idea.</em></h3></div>
   <fieldset disabled={status==='sending'}><div className="contact-fields"><div><label htmlFor="contact-name">Full name</label><input id="contact-name" name="name" autoComplete="name" required maxLength={100} placeholder="Your full name"/></div><div><label htmlFor="contact-email">Email</label><input id="contact-email" name="email" type="email" autoComplete="email" required maxLength={254} placeholder="you@company.com"/></div></div>

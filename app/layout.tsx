@@ -13,6 +13,7 @@ import './focus-gallery.css';
 import './polish.css';
 import './responsive-scenes.css';
 import './enhancement.css';
+import './exhibition.css';
 const title=seoTitle;
 const description=seoDescription;
 export const metadata: Metadata = {

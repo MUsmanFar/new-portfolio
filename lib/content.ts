@@ -2,7 +2,7 @@
 export type ProjectCategory = 'vibe' | 'wordpress' | 'shopify' | 'managed' | 'motion';
 export type Project = {
  id: string; category: ProjectCategory; title: string; industry: string; url?: string;
- screenshot?: string; previewLabel?: string; description: string; platform: string;
+ screenshot?: string; appScreens?: {src:string;label:string}[]; previewLabel?: string; description: string; platform: string;
  role: string; responsibilities: string[]; tags: string[];
 };
 export const site = {
@@ -116,64 +116,23 @@ export const experience = [
 
 export const projects: Project[] = [
   {
-    "id": "grow-dental",
+    "id": "arrowhead-portfolio",
     "category": "vibe",
-    "title": "Grow Dental Supply",
-    "industry": "Dental supplies / eCommerce",
-    "platform": "Next.js + Supabase",
+    "title": "Arrowhead DigiTech — Portfolio",
+    "industry": "Agency / digital portfolio",
+    "url": "https://arrowheaddigitech-portfolio.com",
+    "description": "An agency portfolio bringing digital products, technology services and selected collaborations together in an immersive branded experience.",
+    "platform": "Vibe Coding · AI-assisted development",
     "role": "Vibe Coding Creator",
-    "description": "A dental eCommerce storefront with a custom dashboard for products and orders.",
     "responsibilities": [
-      "Personally created the storefront through Vibe Coding.",
-      "Built a custom admin dashboard for product and order management."
+      "Created the website through Vibe Coding.",
+      "Presented the brand, services and work through a tailored website experience."
     ],
     "tags": [
-      "Next.js",
-      "Supabase",
-      "Vibe Coding"
-    ],
-    "url": "https://growdentalsupply.com/",
-    "screenshot": "/assets/grow-dental.webp"
-  },
-  {
-    "id": "al-awan",
-    "category": "vibe",
-    "title": "Al-Awan Furniture",
-    "industry": "Furniture / interiors",
-    "platform": "Next.js",
-    "role": "Vibe Coding Creator",
-    "description": "A furniture business website designed for enquiries and Google Ads lead generation.",
-    "responsibilities": [
-      "Personally built the website through Vibe Coding.",
-      "Created a conversion-focused layout for furniture enquiries."
-    ],
-    "tags": [
-      "Next.js",
       "Vibe Coding",
-      "Lead generation"
+      "Agency portfolio"
     ],
-    "url": "https://al-awanfurniture.com/",
-    "screenshot": "/assets/al-awan.webp"
-  },
-  {
-    "id": "dubai-tv",
-    "category": "vibe",
-    "title": "Dubai TV Repair",
-    "industry": "Local repair services",
-    "platform": "Next.js",
-    "role": "Vibe Coding Creator",
-    "description": "A service website connecting Google Ads visitors with calls, WhatsApp and repair enquiries.",
-    "responsibilities": [
-      "Personally created the website through Vibe Coding.",
-      "Integrated call, WhatsApp and enquiry paths."
-    ],
-    "tags": [
-      "Next.js",
-      "Vibe Coding",
-      "Lead generation"
-    ],
-    "url": "https://dubaitvrepair.com/",
-    "screenshot": "/assets/dubai-tv.webp"
+    "screenshot": "/assets/projects/arrowhead-portfolio.webp"
   },
   {
     "id": "arrowhead",
@@ -195,7 +154,87 @@ export const projects: Project[] = [
       "Admin dashboard"
     ],
     "url": "https://arrowheaddigitech.com",
-    "screenshot": "/assets/arrowhead.webp"
+    "screenshot": "/assets/projects/arrowhead.webp"
+  },
+  {
+    "id": "expert-tv",
+    "category": "vibe",
+    "title": "Expert TV Services",
+    "industry": "TV repair / OLED services",
+    "url": "https://www.experttvservices.com/",
+    "description": "A TV repair service website presenting OLED care, repair services and direct call and WhatsApp enquiry journeys.",
+    "platform": "Vibe Coding · AI-assisted development",
+    "role": "Vibe Coding Creator",
+    "responsibilities": [
+      "Created the website through Vibe Coding.",
+      "Presented repair services and clear customer enquiry paths."
+    ],
+    "tags": [
+      "Vibe Coding",
+      "Service website",
+      "Lead generation"
+    ],
+    "screenshot": "/assets/projects/expert-tv.webp"
+  },
+  {
+    "id": "grow-dental",
+    "category": "vibe",
+    "title": "Grow Dental Supply",
+    "industry": "Dental supplies / eCommerce",
+    "platform": "Next.js + Supabase",
+    "role": "Vibe Coding Creator",
+    "description": "A dental eCommerce storefront with a custom dashboard for products and orders.",
+    "responsibilities": [
+      "Personally created the storefront through Vibe Coding.",
+      "Built a custom admin dashboard for product and order management."
+    ],
+    "tags": [
+      "Next.js",
+      "Supabase",
+      "Vibe Coding"
+    ],
+    "url": "https://growdentalsupply.com/",
+    "screenshot": "/assets/projects/grow-dental.webp"
+  },
+  {
+    "id": "al-awan",
+    "category": "vibe",
+    "title": "Al-Awan Furniture",
+    "industry": "Furniture / interiors",
+    "platform": "Next.js",
+    "role": "Vibe Coding Creator",
+    "description": "A furniture business website designed for enquiries and Google Ads lead generation.",
+    "responsibilities": [
+      "Personally built the website through Vibe Coding.",
+      "Created a conversion-focused layout for furniture enquiries."
+    ],
+    "tags": [
+      "Next.js",
+      "Vibe Coding",
+      "Lead generation"
+    ],
+    "url": "https://al-awanfurniture.com/",
+    "screenshot": "/assets/projects/al-awan.webp"
+  },
+  {
+    "id": "dubai-tv",
+    "category": "vibe",
+    "title": "Dubai TV Repair",
+    "industry": "Local repair services",
+    "platform": "Next.js",
+    "role": "Vibe Coding Creator",
+    "description": "A service website connecting Google Ads visitors with calls, WhatsApp and repair enquiries.",
+    "responsibilities": [
+      "Personally created the website through Vibe Coding.",
+      "Integrated call, WhatsApp and enquiry paths."
+    ],
+    "tags": [
+      "Next.js",
+      "Vibe Coding",
+      "Lead generation"
+    ],
+    "url": "https://dubaitvrepair.com/",
+    "screenshot": "/assets/projects/dubai-tv.webp"
   },
   {
     "id": "novamed",
@@ -234,7 +273,7 @@ export const projects: Project[] = [
       "Recruitment"
     ],
     "url": "https://georgianeedsnurses.com",
-    "screenshot": "/assets/georgia-nurses.webp"
+    "screenshot": "/assets/projects/georgia.webp"
   },
   {
     "id": "atlanta-car",
@@ -252,7 +291,7 @@ export const projects: Project[] = [
       "Car rental"
     ],
     "url": "https://atlantacar.ae",
-    "screenshot": "/assets/atlanta-car.webp"
+    "screenshot": "/assets/projects/atlanta-car.webp"
   },
   {
     "id": "tight-tone",
@@ -270,7 +309,7 @@ export const projects: Project[] = [
       "Healthcare / wellness"
     ],
     "url": "https://tightandtonewellnesscenter.com",
-    "screenshot": "/assets/tight-and-tone.webp"
+    "screenshot": "/assets/projects/tight-tone.webp"
   },
   {
     "id": "priceless",
@@ -288,7 +327,7 @@ export const projects: Project[] = [
       "Car rental"
     ],
     "url": "https://pricelessga.com",
-    "screenshot": "/assets/priceless.webp"
+    "screenshot": "/assets/projects/priceless.webp"
   },
   {
     "id": "go-jetter",
@@ -306,7 +345,7 @@ export const projects: Project[] = [
       "Travel / tourism"
     ],
     "url": "https://go-jetter.com",
-    "screenshot": "/assets/go-jetter.webp"
+    "screenshot": "/assets/projects/go-jetter.webp"
   },
   {
     "id": "halal-musafir",
@@ -324,24 +363,7 @@ export const projects: Project[] = [
       "Travel / tourism"
     ],
     "url": "https://halalmusafir.com",
-    "screenshot": "/assets/halal-musafir.webp"
-  },
-  {
-    "id": "ihawa",
-    "category": "wordpress",
-    "title": "Ihawa Travel",
-    "industry": "Travel / tourism",
-    "platform": "WordPress",
-    "role": "WordPress Developer",
-    "description": "A travel booking hub and structured content portal built with WordPress.",
-    "responsibilities": [
-      "WordPress website development and management."
-    ],
-    "tags": [
-      "WordPress",
-      "Travel / tourism"
-    ],
-    "screenshot": "/assets/ihawa.webp"
+    "screenshot": "/assets/projects/halal-musafir.webp"
   },
   {
     "id": "rizitech",
@@ -359,7 +381,7 @@ export const projects: Project[] = [
       "Technology / IT services"
     ],
     "url": "https://rizitech.com",
-    "screenshot": "/assets/rizitech.webp"
+    "screenshot": "/assets/projects/rizitech.webp"
   },
   {
     "id": "qari",
@@ -395,7 +417,7 @@ export const projects: Project[] = [
       "eCommerce"
     ],
     "url": "https://salaarcentre.com",
-    "screenshot": "/assets/salaar-centre.webp"
+    "screenshot": "/assets/projects/salaar.webp"
   },
   {
     "id": "lahore",
@@ -413,7 +435,7 @@ export const projects: Project[] = [
       "eCommerce"
     ],
     "url": "https://lahorecentre.com",
-    "screenshot": "/assets/lahore-centre.webp"
+    "screenshot": "/assets/projects/lahore.webp"
   },
   {
     "id": "america",
@@ -436,7 +458,7 @@ export const projects: Project[] = [
       "Mobile application"
     ],
     "url": "https://americaneedsnurses.com",
-    "screenshot": "/assets/america-nurses.webp"
+    "screenshot": "/assets/projects/america.webp"
   },
   {
     "id": "yalaride",
@@ -459,7 +481,33 @@ export const projects: Project[] = [
       "Technical PM"
     ],
     "url": "https://yalaride.com",
-    "screenshot": "/assets/yalaride.webp"
+    "screenshot": "/assets/yalaride.webp",
+    "appScreens": [
+      {
+        "src": "/assets/apps/yalaride-intro.jpg",
+        "label": "Your ride, your way"
+      },
+      {
+        "src": "/assets/apps/yalaride-bid.jpg",
+        "label": "Bid my price"
+      },
+      {
+        "src": "/assets/apps/yalaride-attractions.jpg",
+        "label": "Attractions & experiences"
+      },
+      {
+        "src": "/assets/apps/yalaride-reserve.jpg",
+        "label": "Reserve a car"
+      },
+      {
+        "src": "/assets/apps/yalaride-checkout.jpg",
+        "label": "Booking & checkout"
+      },
+      {
+        "src": "/assets/apps/yalaride-support.jpg",
+        "label": "Help & support"
+      }
+    ]
   },
   {
     "id": "go-jetter-app",
@@ -468,7 +516,28 @@ export const projects: Project[] = [
     "industry": "Travel / mobile application",
     "url": "https://go-jetter.com",
     "screenshot": "/assets/go-jetter.webp",
-    "previewLabel": "Go-Jetter website preview · application screenshots pending",
+    "appScreens": [
+      {
+        "src": "/assets/apps/go-jetter-home.jpg",
+        "label": "Home"
+      },
+      {
+        "src": "/assets/apps/go-jetter-tours.jpg",
+        "label": "Browse tours"
+      },
+      {
+        "src": "/assets/apps/go-jetter-detail.jpg",
+        "label": "Tour details"
+      },
+      {
+        "src": "/assets/apps/go-jetter-reviews.jpg",
+        "label": "Reviews & ratings"
+      },
+      {
+        "src": "/assets/apps/go-jetter-profile.jpg",
+        "label": "Profile"
+      }
+    ],
     "platform": "Flutter · Stripe",
     "role": "Technical Project Manager",
     "description": "A Flutter travel application delivered with developers, connecting Stripe payments with a dashboard for activities, tours and booking operations.",
@@ -522,7 +591,7 @@ export const projects: Project[] = [
       "Vibe Coding",
       "Interactive design"
     ],
-    "screenshot": "/assets/sameer-majeed.webp"
+    "screenshot": "/assets/projects/sameer-majeed.webp"
   },
   {
     "id": "waseeq-nauman",
@@ -542,7 +611,7 @@ export const projects: Project[] = [
       "Vibe Coding",
       "Interactive design"
     ],
-    "screenshot": "/assets/waseeq-nauman.webp"
+    "screenshot": "/assets/projects/waseeq-nauman.webp"
   },
   {
     "id": "mohammed-rizwan",
@@ -562,7 +631,7 @@ export const projects: Project[] = [
       "Vibe Coding",
       "Interactive design"
     ],
-    "screenshot": "/assets/mohammed-rizwan.webp"
+    "screenshot": "/assets/projects/mohammed-rizwan.webp"
   },
   {
     "id": "mohammed-kashan",
@@ -582,26 +651,7 @@ export const projects: Project[] = [
       "Vibe Coding",
       "Interactive design"
     ],
-    "screenshot": "/assets/mohammed-kashan.webp"
-  },
-  {
-    "id": "arrowhead-portfolio",
-    "category": "vibe",
-    "title": "Arrowhead DigiTech — Portfolio",
-    "industry": "Agency / digital portfolio",
-    "url": "https://arrowheaddigitech-portfolio.com",
-    "description": "An agency portfolio bringing digital products, technology services and selected collaborations together in an immersive branded experience.",
-    "platform": "Vibe Coding · AI-assisted development",
-    "role": "Vibe Coding Creator",
-    "responsibilities": [
-      "Created the website through Vibe Coding.",
-      "Presented the brand, services and work through a tailored website experience."
-    ],
-    "tags": [
-      "Vibe Coding",
-      "Agency portfolio"
-    ],
-    "screenshot": "/assets/arrowhead-portfolio.webp"
+    "screenshot": "/assets/projects/mohammed-kashan.webp"
   },
   {
     "id": "royal-tech-labs",
@@ -620,7 +670,7 @@ export const projects: Project[] = [
       "Vibe Coding",
       "Service website"
     ],
-    "screenshot": "/assets/royal-tech-labs.webp"
+    "screenshot": "/assets/projects/royal-tech-labs.webp"
   },
   {
     "id": "oj-properties",
