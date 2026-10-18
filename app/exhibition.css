@@ -28,3 +28,20 @@
 @media(max-width:760px){.exhibit-index{max-height:none;overflow:visible}.exhibit-index nav a{padding:10px 13px;font-size:12px;gap:8px}.exhibit-count{display:flex;position:absolute;right:0;top:-6px;margin:0;gap:5px}.exhibit-count strong{font-size:22px;letter-spacing:-.04em}.exhibit-count>span{font-size:11px}.exhibit-index>.eyebrow{font-size:9px;padding-right:70px}.exhibit-grid{gap:36px}.exhibit-copy>p:not(.eyebrow){font-size:12px}.app-preview{padding:14px 10px 40px;gap:8px}.app-preview .app-artwork{border-radius:7px}.app-preview-label{left:10px;font-size:7px;bottom:10px}.app-screen-gallery{padding:44px 16px 18px}.app-screen-stage{gap:10px}.app-screen-stage figure{width:65%}.app-screen-stage>button{width:32px;height:32px}.app-screen-thumbs>button{flex-basis:74px}.pip-guide{left:12px;width:64px;transform:translate3d(calc((100vw - 88px)*var(--pip-dock,1)),0,0)}}
 @media(max-width:760px){.app-preview{grid-template-columns:repeat(2,minmax(0,1fr))}.app-preview>.app-artwork:nth-child(3){display:none}}
 @media(prefers-reduced-motion:reduce){.pip-float,.pip-eyes,.pip-hand,.pip-character:hover .pip-hand,.mood-thinking .pip-float,.mood-celebrate .pip-float,.pip-bubble,.exhibition-motion .exhibit-card.is-in-view .exhibit-image{animation:none}.pip-guide,.exhibit-image{transition:none}.exhibit-image:hover{transform:none}}
+/* Scroll-driven covers: every card shares a sticky resting point. */
+.exhibit-index,.exhibit-index nav{scrollbar-color:#b9ed63 #182312;scrollbar-width:thin}
+.exhibit-index::-webkit-scrollbar,.exhibit-index nav::-webkit-scrollbar{width:6px;height:6px}
+.exhibit-index::-webkit-scrollbar-track,.exhibit-index nav::-webkit-scrollbar-track{background:#182312;border-radius:8px}
+.exhibit-index::-webkit-scrollbar-thumb,.exhibit-index nav::-webkit-scrollbar-thumb{background:#b9ed63;border-radius:8px}
+@media(min-width:761px) and (min-height:600px) and (prefers-reduced-motion:no-preference){
+ .exhibition-stack .exhibit-grid{display:flex;flex-direction:column;gap:90px;isolation:isolate}
+ .exhibition-stack .exhibit-card{position:sticky;top:105px;height:calc(100svh - 125px);flex-shrink:0;display:flex;flex-direction:column;background:#10180e;border:1px solid #81986455;border-radius:18px;padding:12px;box-shadow:0 -12px 32px #05090455;scroll-margin-top:105px}
+ .exhibition-stack .exhibit-image{flex:1;min-height:0;display:flex;flex-direction:column;padding:10px;border:0;border-radius:10px}
+ .exhibition-stack .exhibit-image img{flex:1;min-height:0;height:0;aspect-ratio:auto;object-fit:contain;object-position:center;background:#182312}
+ .exhibition-stack .exhibit-browser{flex-shrink:0}
+ .exhibition-stack .exhibit-copy{flex-shrink:0;padding:14px 10px 4px}
+ .exhibition-stack .exhibit-copy>p:not(.eyebrow){margin:7px 0;line-height:1.5;font-size:12px}
+ .exhibition-stack .exhibit-title h3{font-size:clamp(22px,2vw,30px)}
+ .exhibition-stack .exhibit-tags{margin-top:8px}
+ .exhibition-stack .exhibit-card.is-in-view .exhibit-image{animation:none}
+}

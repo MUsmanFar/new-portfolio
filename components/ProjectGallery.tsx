@@ -7,6 +7,7 @@ import {AppPreview} from './AppScreens';
 export default function ProjectGallery({projects,collectionId,onSelect,motion}:{projects:Project[];collectionId:string;onSelect:(project:Project)=>void;motion:boolean}){
  const root=useRef<HTMLDivElement>(null);
  const [active,setActive]=useState(0);
+ const stacked=motion&&collectionId!=='managed';
  useEffect(()=>{
   const cards=Array.from(root.current?.querySelectorAll<HTMLElement>('.exhibit-card')||[]);
   let frame=0,visible=false;
@@ -19,8 +20,18 @@ export default function ProjectGallery({projects,collectionId,onSelect,motion}:{
   window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);
   return()=>{visibility.disconnect();reveal.disconnect();cancelAnimationFrame(frame);window.removeEventListener('scroll',schedule);window.removeEventListener('resize',schedule)};
  },[]);
- return <div ref={root} className={'project-exhibition'+(motion?' exhibition-motion':'')}>
-  <aside className="exhibit-index"><span className="eyebrow">IN THIS COLLECTION</span><div className="exhibit-count"><strong>{String(active+1).padStart(2,'0')}</strong><span>/ {String(projects.length).padStart(2,'0')}</span></div><nav aria-label={collectionId+' project index'}>{projects.map((project,i)=><a href={'#exhibit-'+project.id} key={project.id} aria-current={i===active?'location':undefined}><span>{String(i+1).padStart(2,'0')}</span>{project.title}<span aria-hidden="true">↗</span></a>)}</nav><p>A closer look at the work.<br/>Open a project for the full story.</p></aside>
+ return <div ref={root} className={'project-exhibition'+(motion?' exhibition-motion':'')+(stacked?' exhibition-stack':'')}>
+  <aside className="exhibit-index" data-lenis-prevent><span className="eyebrow">IN THIS COLLECTION</span><div className="exhibit-count"><strong>{String(active+1).padStart(2,'0')}</strong><span>/ {String(projects.length).padStart(2,'0')}</span></div><nav aria-label={collectionId+' project index'}>{projects.map((project,i)=><a href={'#exhibit-'+project.id} key={project.id} onClick={event=>{
+    if(!stacked||!matchMedia('(min-width:761px) and (min-height:600px) and (prefers-reduced-motion:no-preference)').matches)return;
+    const grid=root.current?.querySelector<HTMLElement>('.exhibit-grid');
+    if(!grid)return;
+    event.preventDefault();event.stopPropagation();
+    const cards=Array.from(grid.children) as HTMLElement[];
+    const gap=parseFloat(getComputedStyle(grid).rowGap)||0;
+    const top=scrollY+grid.getBoundingClientRect().top+cards.slice(0,i).reduce((sum,card)=>sum+card.offsetHeight+gap,0)-105;
+    history.replaceState(null,'','#exhibit-'+project.id);
+    window.dispatchEvent(new CustomEvent('portfolio:chapter',{detail:top}));
+   }} aria-current={i===active?'location':undefined}><span>{String(i+1).padStart(2,'0')}</span>{project.title}<span aria-hidden="true">↗</span></a>)}</nav><p>A closer look at the work.<br/>Open a project for the full story.</p></aside>
   <div className="exhibit-grid">{projects.map((project,i)=><article id={'exhibit-'+project.id} data-index={i} key={project.id} className={'exhibit-card'+(i===0?' exhibit-featured':'')}>
    <button className="exhibit-image" onClick={()=>onSelect(project)} aria-label={'View '+project.title+' project details'}><span className="exhibit-browser" aria-hidden="true"><span>● ● ●</span><span>{project.appScreens?'MOBILE APP / '+project.platform:project.url?new URL(project.url).hostname:'PROJECT PREVIEW'}</span><ArrowIcon/></span>{project.appScreens?<AppPreview screens={project.appScreens}/>:project.screenshot?<img src={project.screenshot} alt={project.title+' project preview'} width="1440" height="900" loading="lazy" decoding="async"/>:<span className="exhibit-placeholder"><span>uf®</span>{project.title}<small>Discover the story behind this project</small></span>}<span className="exhibit-view">View the project <ArrowIcon/></span></button>
    <div className="exhibit-copy"><p className="eyebrow">{String(i+1).padStart(2,'0')} / {project.industry}</p><button className="exhibit-title" onClick={()=>onSelect(project)}><h3>{project.title}</h3><ArrowIcon/></button><p>{project.description}</p>{project.previewLabel&&<small className="exhibit-caption">{project.previewLabel}</small>}<div className="exhibit-tags">{project.tags.slice(0,3).map(tag=><span key={tag}>{tag}</span>)}</div></div>
