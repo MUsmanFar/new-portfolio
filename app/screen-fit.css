@@ -1,0 +1,41 @@
+/* Bound editorial content on large monitors while retaining full-width scenery. */
+.project-exhibition{width:90%;max-width:1600px;margin-inline:auto}
+.exhibit-grid,.exhibit-copy,.career-narrative,.career-evidence,.about-copy,.contact-story{min-width:0}
+.exhibit-title h3,.career-narrative h3,.career-role{overflow-wrap:break-word}
+@media(min-width:1800px){
+ .portfolio{--screen-gutter:max(5vw,calc((100vw - 1600px)/2))}
+ .navigation{max-width:1600px}
+ .directory-intro,.collection-directory,.category-header,.creative-grid{max-width:1600px;margin-inline:auto;width:90%}
+ .section,.career-section{padding-inline:var(--screen-gutter)}
+ .intro-copy,.person-copy{left:var(--screen-gutter)}
+ .entrance-footer{left:var(--screen-gutter);right:var(--screen-gutter)}
+ .intro-copy{max-width:760px}
+ .person-copy{max-width:680px}
+ .reel-live .reel-stage{padding-inline:var(--screen-gutter)}
+ .about-grid,.services-layout,.career-intro,.career-track{max-width:1600px;margin-inline:auto}
+ .about-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+ .career-enhanced .career-panel{gap:6%}
+ .career-enhanced .career-period{font-size:clamp(25px,2vw,38px)}
+}
+@media(min-width:1800px) and (prefers-reduced-motion:no-preference){
+ .exhibition-stack{--stack-top:max(105px,calc((100svh - 900px)/2))}
+ .exhibition-stack .exhibit-card{height:min(900px,calc(100svh - var(--stack-top) - 20px))}
+ .exhibition-stack .exhibit-index{top:var(--stack-top);max-height:min(900px,calc(100svh - var(--stack-top) - 20px))}
+}
+/* Preserve readable cards and reachable controls on compact phones and landscape screens. */
+@media(max-width:360px){
+ .project-exhibition{width:94%}
+ .exhibit-title h3{font-size:21px}
+ .exhibition-stack .exhibit-title h3{font-size:20px}
+ .exhibit-browser{font-size:8px;gap:7px}
+ .career-enhanced .career-period{font-size:18px}
+ .career-enhanced .career-narrative h3{font-size:25px}
+ .contact-panel{padding-inline:14px}
+}
+@media(max-height:520px){
+ .career-enhanced .career-stage{min-height:0}
+ .career-enhanced .career-period{font-size:17px;margin:6px 0}
+ .career-enhanced .career-narrative .eyebrow{font-size:8px}
+ .career-enhanced .career-role{font-size:11px}
+ .career-enhanced .career-narrative h3{font-size:22px;margin-bottom:8px}
+}

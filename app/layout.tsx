@@ -14,6 +14,7 @@ import './polish.css';
 import './responsive-scenes.css';
 import './enhancement.css';
 import './exhibition.css';
+import './screen-fit.css';
 const title=seoTitle;
 const description=seoDescription;
 export const metadata: Metadata = {

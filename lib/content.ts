@@ -71,15 +71,15 @@ export const services = [
 
 export const experience = [
   {
-    period: "2024 – Present",
+    period: "2024 – 30 October 2026",
     company: "Arrowhead Digital Marketing",
     role: "Web Development Lead & Project Manager",
     points: [
-      "Leading client communication and project execution.",
-      "Building and maintaining WordPress websites.",
-      "Coordinating software development initiatives.",
-      "Managing hosting, domains, and website infrastructure.",
-      "Leading the YalaRide portal development project.",
+      "Led client communication and project execution.",
+      "Built and maintained WordPress websites.",
+      "Coordinated software development initiatives.",
+      "Managed hosting, domains, and website infrastructure.",
+      "Led the YalaRide portal development project.",
     ],
   },
   {

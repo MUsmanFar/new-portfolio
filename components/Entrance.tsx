@@ -60,7 +60,11 @@ export default function Entrance({onUnavailable}:{onUnavailable:()=>void}){
   const tween=gsap.to(state,{progress:1,ease:'none',scrollTrigger:{trigger:entry,start:'top top',end:'bottom bottom',scrub:constrained?.3:.7},onUpdate:()=>{dirty=true}});
   const mouse={x:0,y:0},smoothMouse={x:0,y:0};
   const pointer=(e:PointerEvent)=>{if(constrained||e.pointerType!=='mouse')return;mouse.x=(e.clientX/innerWidth-.5)*.14;mouse.y=(e.clientY/innerHeight-.5)*.08;dirty=true};
-  const resize=()=>{const w=mount.clientWidth,h=mount.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.fov=w<760?58:43;camera.updateProjectionMatrix();dirty=true};
+  const resize=()=>{const w=mount.clientWidth,h=mount.clientHeight;
+   // Bound the GPU canvas cost on 4K and ultrawide displays.
+   const pixelBudget=constrained?1920*1080:2560*1440;
+   renderer.setPixelRatio(Math.min(devicePixelRatio,constrained?1:1.25,Math.sqrt(pixelBudget/Math.max(1,w*h))));
+   renderer.setSize(w,h);camera.aspect=w/h;camera.fov=w<760?58:43;camera.updateProjectionMatrix();dirty=true};
   const ro=new ResizeObserver(resize);ro.observe(mount);resize();
   const io=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible)dirty=true});io.observe(mount);
   const changeVisibility=()=>{dirty=true};document.addEventListener('visibilitychange',changeVisibility);window.addEventListener('pointermove',pointer,{passive:true});
